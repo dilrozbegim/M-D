@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>To'y Taklifnomasi | Mirodil & Dilrozbegim</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #fcfaf7; 
+            --primary-color: #801222; /* To'q qizil / Bordo */
+            --text-dark: #222222;
+            --text-muted: #555555;
+            --glass-bg: rgba(255, 255, 255, 0.8);
+            --glass-border: rgba(255, 255, 255, 0.6);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #801222;
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .phone-wrapper {
+            width: 100%;
+            max-width: 430px;
+            height: 100vh;
+            height: 100dvh;
+            background: var(--bg-color);
+            position: relative;
+            overflow-y: auto;
+            overflow-x: hidden;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+        }
+
+        @media (min-width: 768px) {
+            .phone-wrapper {
+                height: 850px;
+                border-radius: 30px;
+                margin: 20px 0;
+            }
+        }
+
+        /* 1. VIDEO YOKI KONVERT QISMI */
+        .envelope-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: #801222;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+
+        .envelope-overlay.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .intro-video-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #801222;
+        }
+
+        .intro-video-container video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain; /* Video kesilib qolmasligi uchun */
+        }
+
+        .video-overlay-content {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            height: 100%;
+            padding-bottom: 50px;
+            width: 100%;
+            background: linear-gradient(to top, rgba(128, 18, 34, 0.9) 0%, rgba(0,0,0,0) 40%);
+        }
+
+        .btn-open {
+            background-color: #ffffff;
+            color: var(--primary-color);
+            border: none;
+            padding: 14px 35px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-open:active {
+            transform: scale(0.95);
+        }
+
+        /* 2. ASOSIY TAKLIFNOMA MAZMUNI */
+        .main-content {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 1s ease 0.3s, transform 1s ease 0.3s;
+            position: relative;
+            width: 100%;
+            display: none;
+            padding-bottom: 50px;
+        }
+
+        .main-content.visible {
+            opacity: 1;
+            transform: translateY(0);
+            display: block;
+        }
+
+        .section {
+            padding: 40px 20px;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-names {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3.2rem;
+            font-style: italic;
+            color: var(--primary-color);
+            line-height: 1.1;
+            margin-bottom: 20px;
+        }
+
+        .photo-frame {
+            width: 100%;
+            height: 380px;
+            margin: 0 auto 25px auto;
+            border-radius: 15px 15px 60px 15px;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(128, 18, 34, 0.15);
+            background-color: #ebe4df;
+        }
+
+        .photo-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .section-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.2rem;
+            font-style: italic;
+            color: var(--primary-color);
+            margin-bottom: 12px;
+        }
+
+        .invitation-text {
+            font-size: 0.92rem;
+            color: var(--text-muted);
+            line-height: 1.7;
+        }
+
+        /* ORTGA QAYTISH VAQTI (COUNTDOWN) */
+        .countdown-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .countdown-box {
+            background: rgba(128, 18, 34, 0.05);
+            padding: 12px 5px;
+            border-radius: 10px;
+            border: 1px solid rgba(128, 18, 34, 0.1);
+        }
+        .countdown-number {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+        .countdown-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        /* TAQVIM */
+        .calendar-box {
+            margin: 15px 0;
+            background: var(--glass-bg);
+            padding: 20px;
+            border-radius: 16px;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 10px 25px rgba(128, 18, 34, 0.05);
+        }
+
+        .calendar-row {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            max-width: 300px;
+            margin: 0 auto;
+            font-size: 0.85rem;
+        }
+
+        .weekdays div {
+            color: var(--primary-color);
+            font-weight: 500;
+            padding-bottom: 10px;
+        }
+
+        .days div {
+            padding: 10px 0;
+            color: #333;
+        }
+        
+        .days {
+            padding-bottom: 10px; 
+        }
+
+        .active-day {
+            position: relative;
+            color: var(--primary-color) !important;
+            font-weight: bold;
+            z-index: 5;
+        }
+
+        .active-day::after {
+            content: '';
+            position: absolute;
+            width: 42px; 
+            height: 42px;
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23801222' stroke-width='1.2' stroke-linecap='round' stroke-linejoin='round'><path d='M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z'/></svg>");
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -46%); 
+            z-index: -1;
+        }
+
+        /* GALEREYA */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 20px;
+        }
+        .gallery-item {
+            height: 180px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            background-color: #ebe4df;
+        }
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        /* VAQT JADVALI */
+        .timeline-item {
+            margin-bottom: 30px;
+        }
+
+        .time {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 4px;
+            letter-spacing: 1px;
+        }
+
+        .event {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.6rem;
+            font-style: italic;
+            margin-bottom: 6px;
+        }
+
+        .desc {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        /* BLOKLAR */
+        .bordo-card {
+            background-color: var(--primary-color);
+            color: #ffffff;
+            padding: 30px 20px;
+            border-radius: 16px;
+            margin: 20px 0;
+            text-align: center;
+            box-shadow: 0 10px 20px rgba(128, 18, 34, 0.15);
+        }
+
+        .bordo-card h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            font-style: italic;
+            margin-bottom: 10px;
+            color: #ffffff;
+        }
+
+        .bordo-card p {
+            font-size: 0.88rem;
+            line-height: 1.6;
+            opacity: 0.95;
+        }
+
+        .white-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            padding: 25px 20px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(128, 18, 34, 0.05);
+            border: 1px solid var(--glass-border);
+            margin-top: 15px;
+        }
+
+        .btn-link {
+            display: inline-block;
+            background: var(--primary-color);
+            color: white;
+            padding: 12px 30px;
+            text-decoration: none;
+            border-radius: 30px;
+            font-size: 0.88rem;
+            margin-top: 15px;
+            font-weight: 500;
+        }
+
+        /* FORMA */
+        .rsvp-input {
+            width: 100%;
+            padding: 13px;
+            margin: 8px 0 15px 0;
+            border: 1px solid rgba(128, 18, 34, 0.2);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.9rem;
+            outline: none;
+        }
+
+        .btn-submit {
+            width: 100%;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+
+        /* MUSIQANI BOSHQARISH TUGMASI */
+        .music-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 999;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <audio id="bgMusic" loop>
+        <source src="muzik.mp3" type="audio/mp3">
+    </audio>
+
+    <button class="music-toggle" id="musicBtn" onclick="toggleMusic()">🎵</button>
+
+    <div class="phone-wrapper" id="phoneWrapper">
+        
+        <!-- VIDEO VA KONVERT QISMI -->
+        <div class="envelope-overlay" id="envelope">
+            <div class="intro-video-container">
+                <video autoplay muted loop playsinline>
+                    <source src="Animate_wedding_invitation_scene_20260930105540.mp4" type="video/mp4">
+                    Sizning brauzeringiz videoni qo'llab-quvvatlamaydi.
+                </video>
+            </div>
+            
+            <div class="video-overlay-content">
+                <button class="btn-open" onclick="openInvitation()">Taklifnomani ochish</button>
+            </div>
+        </div>
+
+        <!-- ASOSIY TAKLIFNOMA MAZMUNI -->
+        <div class="main-content" id="content">
+            
+            <section class="section">
+                <div class="hero-names">Mirodil<br>&<br>Dilrozbegim</div>
+                <div class="photo-frame">
+                    <img src="wedding.jpg" alt="Mirodil & Dilrozbegim">
+                </div>
+                <h3 class="section-title">Aziz mehmonlar!</h3>
+                <p class="invitation-text">
+                    Biz uchun qadrli bo'lgan insonlarni hayotimizning eng go'zal kunida kutib qolamiz. Bizning baxtli kunimizga fayz berishingizdan mamnunmiz.
+                </p>
+
+                <div class="countdown-container">
+                    <div class="countdown-box">
+                        <div class="countdown-number" id="days">00</div>
+                        <div class="countdown-label">Kun</div>
+                    </div>
+                    <div class="countdown-box">
+                        <div class="countdown-number" id="hours">00</div>
+                        <div class="countdown-label">Soat</div>
+                    </div>
+                    <div class="countdown-box">
+                        <div class="countdown-number" id="minutes">00</div>
+                        <div class="countdown-label">Daqiqa</div>
+                    </div>
+                    <div class="countdown-box">
+                        <div class="countdown-number" id="seconds">00</div>
+                        <div class="countdown-label">Soniya</div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section" style="padding-top: 0;">
+                <h3 class="section-title">Oktyabr 2026</h3>
+                <div class="calendar-box">
+                    <div class="calendar-row weekdays">
+                        <div>Du</div><div>Se</div><div>Ch</div><div>Pa</div><div>Ju</div><div>Sh</div><div>Ya</div>
+                    </div>
+                    <div class="calendar-row days">
+                        <div></div><div></div><div></div><div>1</div><div>2</div><div>3</div><div>4</div>
+                        <div>5</div><div>6</div><div>7</div><div>8</div><div>9</div><div>10</div><div>11</div>
+                        <div>12</div><div>13</div><div>14</div><div>15</div><div>16</div><div>17</div><div>18</div>
+                        <div class="active-day">19</div><div>20</div><div>21</div><div>22</div><div>23</div><div>24</div><div>25</div>
+                        <div>26</div><div>27</div><div>28</div><div>29</div><div>30</div><div>31</div><div></div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section" style="padding-top: 0;">
+                <h3 class="section-title">Bizning xotiralar</h3>
+                <p class="invitation-text" style="margin-bottom: 15px;">Baxtli lahzalarimizdan lavhalar</p>
+                <div class="gallery-grid">
+                    <div class="gallery-item">
+                        <img src="gallery1.jpg" alt="Xotira 1">
+                    </div>
+                    <div class="gallery-item">
+                        <img src="gallery2.jpg" alt="Xotira 2">
+                    </div>
+                </div>
+            </section>
+
+            <section class="section timeline" style="padding-top: 0;">
+                <h3 class="section-title" style="margin-bottom: 25px;">Dastur</h3>
+                
+                <div class="timeline-item">
+                    <div class="time">12:00</div>
+                    <div class="event">Kelish va to'planish</div>
+                    <div class="desc">Chiroyli suhbatlar va esdalik rasmlarga tushish vaqti.</div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="time">14:00</div>
+                    <div class="event">Tantanali marosim</div>
+                    <div class="desc">Fayzli oqshom, qizg'in raqslar va tabriklar.</div>
+                </div>
+            </section>
+
+            <section class="section">
+                <h3 class="section-title">Manzil</h3>
+                <div class="white-card">
+                    <h4 style="font-size: 1.2rem; color: var(--primary-color); font-family: 'Cormorant Garamond', serif; font-style: italic;">"Royal Beach" Restorani</h4>
+                    <p class="desc" style="margin-top: 6px;">Yunusobod tumani, Bog'ishamol ko'chasi, 14-uy</p>
+                    <a href="https://maps.google.com" target="_blank" class="btn-link">Xaritadan ko'rish</a>
+                </div>
+            </section>
+
+            <section class="section" style="padding-top: 0; padding-bottom: 10px;">
+                <div class="bordo-card">
+                    <h3>Gullar haqida</h3>
+                    <p>Iltimos, bizga tirik gullar taqdim etmang. To'ydan keyin darhol sayohatga ketayotganimiz uchun ularga qarashga ulgura olmaymiz.</p>
+                </div>
+
+                <div class="bordo-card">
+                    <h3>Sovg'alar</h3>
+                    <p>Agar siz bizga esdalik sovg'a bermoqchi bo'lsangiz, uni ixchamgina konvert ko'rinishida bersangiz judayam xursand bo'lardik.</p>
+                </div>
+            </section>
+
+            <section class="section">
+                <h3 class="section-title">Tashrifingizni tasdiqlang</h3>
+                <div class="white-card" style="text-align: left;">
+                    <form id="rsvpForm">
+                        <label class="desc" style="font-weight: 500;">Ismingiz:</label>
+                        <input type="text" id="guestName" class="rsvp-input" placeholder="Ism va familiyangiz" required>
+                        
+                        <label class="desc" style="font-weight: 500;">Kelolasizmi?</label>
+                        <select id="guestStatus" class="rsvp-input" required>
+                            <option value="" disabled selected>Tanlang...</option>
+                            <option value="Albatta, boraman!">Albatta, boraman!</option>
+                            <option value="Afsuski, bora olmayman.">Afsuski, bora olmayman.</option>
+                        </select>
+                        
+                        <button type="submit" class="btn-submit">Tasdiqlash</button>
+                    </form>
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+    <script>
+        function openInvitation() {
+            const envelope = document.getElementById('envelope');
+            const content = document.getElementById('content');
+            const music = document.getElementById('bgMusic');
+            const musicBtn = document.getElementById('musicBtn');
+            
+            envelope.classList.add('hidden');
+            content.classList.add('visible');
+            musicBtn.style.display = 'flex';
+            
+            music.play().catch(error => {
+                console.log("Musiqani avtomatik ochish cheklangan:", error);
+            });
+        }
+
+        let isPlaying = true;
+        function toggleMusic() {
+            const music = document.getElementById('bgMusic');
+            const musicBtn = document.getElementById('musicBtn');
+            if (isPlaying) {
+                music.pause();
+                musicBtn.textContent = '🔇';
+            } else {
+                music.play();
+                musicBtn.textContent = '🎵';
+            }
+            isPlaying = !isPlaying;
+        }
+
+        const weddingDate = new Date("October 19, 2026 12:00:00").getTime();
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const gap = weddingDate - now;
+
+            if (gap < 0) {
+                document.querySelector(".countdown-container").innerHTML = "<p style='color:var(--primary-color); font-weight:600;'>To'y kuni boshlandi!</p>";
+                return;
+            }
+
+            const second = 1000;
+            const minute = second * 60;
+            const hour = minute * 60;
+            const day = hour * 24;
+
+            const d = Math.floor(gap / day);
+            const h = Math.floor((gap % day) / hour);
+            const m = Math.floor((gap % hour) / minute);
+            const s = Math.floor((gap % minute) / second);
+
+            document.getElementById('days').innerText = d < 10 ? '0' + d : d;
+            document.getElementById('hours').innerText = h < 10 ? '0' + h : h;
+            document.getElementById('minutes').innerText = m < 10 ? '0' + m : m;
+            document.getElementById('seconds').innerText = s < 10 ? '0' + s : s;
+        }
+
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        document.getElementById('rsvpForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('guestName').value;
+            const status = document.getElementById('guestStatus').value;
+
+            alert(`Rahmat, ${name}! Javobingiz qabul qilindi: "${status}"`);
+            document.getElementById('rsvpForm').reset();
+        });
+    </script>
+</body>
+</html>
